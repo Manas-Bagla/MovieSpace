@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
-
+// http://www.omdbapi.com/?i=tt3896198&apikey=e7694217
+import Navbar from "./components/navbar.js";
+import Card from "./components/card.js";
+import { useEffect, useState } from "react";
 function App() {
+  const [movies, setMovies] = useState([]);
+  const [search,setSearch] = useState("marvel")
+         
+       const getMovieRequest = async (search) =>{
+        const url =`http://www.omdbapi.com/?s=${search}&apikey=e7694217`;
+        const response = await fetch(url);
+        const responseJson = await response.json();
+        if (responseJson.Search) {
+          setMovies(responseJson.Search)
+        } else {
+          
+        }
+     
+       }
+       useEffect(() =>{
+        getMovieRequest(search);
+       },[search]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+   
+    <div className="App bg-[#12232E]">
+         <Navbar search={search} setSearch={setSearch}/>
+         <Card movies={movies}/>
     </div>
   );
 }
